@@ -4,10 +4,8 @@ import json
 
 from mixer.backend.flask import mixer
 
-from webservice.main import create_app, db
+from webservice.main import db
 from webservice.models import Person
-
-test_app = create_app()
 
 from base import BaseTestCase
 
