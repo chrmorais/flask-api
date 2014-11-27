@@ -8,6 +8,7 @@ Como executar
 ==============
 
 Instale todos as bibliotecas necessárias com:
+
     `pip install -r requirements.txt`
 
 
@@ -37,9 +38,11 @@ Testes
 =======
 
 Para executar os testes rode:
+
    `nosetests tests/`
 
 
 Para visualizar o relatório de cobertura execute:
+
     `nosetests tests/ --with-coverage --cover-package=webservice`
 
