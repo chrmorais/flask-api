@@ -9,16 +9,16 @@ Como executar
 
 Instale todos as bibliotecas necessárias com:
 
-    `pip install -r requirements.txt`
+    pip install -r requirements.txt
 
 
 Primeiro você precisa criar as tabelas do projeto, para isso execute o comando:
 
-    `python manage.py create_tables`
+    python manage.py create_tables
 
 Para rodar o servidor, execute:
 
-    `python manage.py runserver`
+    python manage.py runserver
 
 
 Exemplos de requisições
@@ -39,10 +39,10 @@ Testes
 
 Para executar os testes rode:
 
-   `nosetests tests/`
+   nosetests tests/
 
 
 Para visualizar o relatório de cobertura execute:
 
-    `nosetests tests/ --with-coverage --cover-package=webservice`
+    nosetests tests/ --with-coverage --cover-package=webservice
 
