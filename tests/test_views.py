@@ -43,3 +43,14 @@ class PersonListTestCase(BaseTestCase):
 
         data = json.loads(response.data)
         self.assertEqual([], data['persons'])
+
+
+class PersonInsertTestCase(BaseTestCase):
+    def test_valid_facebook_id_should_create_person(self):
+        pass
+
+    def test_invalid_facebook_id_should_fail(self):
+        pass
+
+    def test_invalid_method_should_return_not_allowed(self):
+        pass
