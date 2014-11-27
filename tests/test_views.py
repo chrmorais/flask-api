@@ -68,3 +68,11 @@ class PersonInsertTestCase(BaseTestCase):
 
         response = self.client.post('/person/', data={'facebookId': '123123'})
         self.assertEqual(404, response.status_code)
+
+
+class PersonDeleteTestCase(BaseTestCase):
+    def test_invalid_facebook_id_should_return_404(self):
+        pass
+
+    def test_valid_facebook_id_should_delete_person(self):
+        pass
