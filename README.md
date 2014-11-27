@@ -39,7 +39,7 @@ Testes
 
 Para executar os testes rode:
 
-   nosetests tests/
+    nosetests tests/
 
 
 Para visualizar o relatório de cobertura execute:

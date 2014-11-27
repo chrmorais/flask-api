@@ -25,7 +25,8 @@ class PersonAPI(restful.Resource):
         except UserNotFound:
             return {'error': 'Invalid facebookId'}, 404
 
-        return {'message': 'ok'}
+        Person.save_person(**user_data)
+        return {'message': 'ok'}, 201
 
     @facebook_id_required
     def delete(self, facebook_id):

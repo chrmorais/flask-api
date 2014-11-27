@@ -3,11 +3,13 @@
 import json
 
 from mixer.backend.flask import mixer
+import mock
 
+from webservice.exceptions import UserNotFound
 from webservice.main import db
 from webservice.models import Person
 
-from base import BaseTestCase
+from tests.base import BaseTestCase
 
 
 class PersonListTestCase(BaseTestCase):
@@ -44,11 +46,25 @@ class PersonListTestCase(BaseTestCase):
 
 
 class PersonInsertTestCase(BaseTestCase):
-    def test_valid_facebook_id_should_create_person(self):
-        pass
+    @mock.patch('webservice.api.Facebook')
+    def test_valid_facebook_id_should_create_person(self, facebook_mock):
+        facebook_mock.get_user_data.return_value = {
+            'facebook_id': '123123',
+            'username': 'username.test',
+            'name': 'test',
+            'gender': 'male'
+        }
 
-    def test_invalid_facebook_id_should_fail(self):
-        pass
+        self.assertEqual(0, Person.query.count())
 
-    def test_invalid_method_should_return_not_allowed(self):
-        pass
+        response = self.client.post('/person/', data={'facebookId': '123123'})
+
+        self.assertEqual(201, response.status_code)
+        self.assertEqual(1, Person.query.count())
+
+    @mock.patch('webservice.api.Facebook')
+    def test_invalid_facebook_id_should_fail(self, facebook_mock):
+        facebook_mock.get_user_data.side_effect = UserNotFound
+
+        response = self.client.post('/person/', data={'facebookId': '123123'})
+        self.assertEqual(404, response.status_code)
