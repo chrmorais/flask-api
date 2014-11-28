@@ -2,7 +2,7 @@
 
 from sqlalchemy.orm.exc import NoResultFound
 
-from webservice.exceptions import UserNotFound
+from webservice.exceptions import UserFound, UserNotFound
 from webservice.main import db
 
 
@@ -22,7 +22,7 @@ class Person(db.Model):
         for person in query.all():
             persons.append({
                 'username': person.username,
-                'facebookId': person.facebook_id,
+                'facebook_id': person.facebook_id,
                 'name': person.name,
                 'gender': person.gender
             })
@@ -36,10 +36,13 @@ class Person(db.Model):
             raise UserNotFound()
 
         db.session.delete(person)
-        db.session.flush()
+        db.session.commit()
 
     @staticmethod
     def save_person(facebook_id, username, name, gender):
+        if Person.query.filter_by(facebook_id=facebook_id).first():
+            raise UserFound()
+
         person = Person()
         person.facebook_id = facebook_id
         person.username = username
@@ -47,4 +50,4 @@ class Person(db.Model):
         person.gender = gender
 
         db.session.add(person)
-        db.session.flush()
+        db.session.commit()

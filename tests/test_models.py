@@ -2,6 +2,7 @@
 
 from mixer.backend.flask import mixer
 
+from webservice.exceptions import UserFound
 from webservice.main import db
 from webservice.models import Person
 
@@ -23,7 +24,7 @@ class PersonModelTestCase(BaseTestCase):
         for person in persons:
             expected_list.append({
                 'username': person.username,
-                'facebookId': person.facebook_id,
+                'facebook_id': person.facebook_id,
                 'name': person.name,
                 'gender': person.gender
             })
@@ -42,6 +43,18 @@ class PersonModelTestCase(BaseTestCase):
 
         self.assertEqual(0, Person.query.count())
         Person.save_person(**data)
+        self.assertEqual(1, Person.query.count())
+
+    def test_save_person_twice_should_raises_exception(self):
+        data = {'facebook_id': '123', 'username': 'username',
+                'name': 'name_test', 'gender': 'male'}
+
+        Person.save_person(**data)
+        self.assertEqual(1, Person.query.count())
+
+        with self.assertRaises(UserFound):
+            Person.save_person(**data)
+
         self.assertEqual(1, Person.query.count())
 
     def test_delete_person_should_remove_person_from_db(self):

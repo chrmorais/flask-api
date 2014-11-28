@@ -28,10 +28,10 @@ Exemplos de requisições
         GET http://localhost:5000/person/
 
     * Incluir usuário
-        POST http://localhost:5000/person/ {facebookId: 12312312}
+        POST http://localhost:5000/person/ {facebook_id: 12312312}
 
     * Excluir usuário
-        DELETE http://localhost:5000/person/<facebookId>
+        DELETE http://localhost:5000/person/<facebook_id>
 
 
 Testes

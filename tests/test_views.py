@@ -57,16 +57,35 @@ class PersonPostTestCase(BaseTestCase):
 
         self.assertEqual(0, Person.query.count())
 
-        response = self.client.post('/person/123123')
+        response = self.client.post('/person/',
+                                    data={'facebook_id': '123123'})
 
         self.assertEqual(201, response.status_code)
         self.assertEqual(1, Person.query.count())
 
     @mock.patch('webservice.api.Facebook')
+    def test_already_inserted_person_should_fail(self, facebook_mock):
+        facebook_mock.get_user_data.return_value = {
+            'facebook_id': '123123',
+            'username': 'username.test',
+            'name': 'test',
+            'gender': 'male'
+        }
+        response = self.client.post('/person/',
+                                    data={'facebook_id': '123123'})
+
+        self.assertEqual(201, response.status_code)
+
+        response = self.client.post('/person/',
+                                    data={'facebook_id': '123123'})
+        self.assertEqual(400, response.status_code)
+
+    @mock.patch('webservice.api.Facebook')
     def test_invalid_facebook_id_should_fail(self, facebook_mock):
         facebook_mock.get_user_data.side_effect = UserNotFound
 
-        response = self.client.post('/person/123123')
+        response = self.client.post('/person/',
+                                    data={'facebook_id': '123123'})
         self.assertEqual(404, response.status_code)
 
 
@@ -75,7 +94,7 @@ class PersonDeleteTestCase(BaseTestCase):
         response = self.client.delete('/person/123123')
         self.assertEqual(404, response.status_code)
         data = json.loads(response.data)
-        self.assertEqual('Invalid facebookId.', data['error'])
+        self.assertEqual('Invalid facebook_id.', data['error'])
 
     def test_valid_facebook_id_should_delete_person(self):
         person = mixer.blend(Person, facebook_id='123123')
